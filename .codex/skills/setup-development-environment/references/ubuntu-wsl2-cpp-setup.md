@@ -1,10 +1,10 @@
-# Ubuntu/WSL2 C++ Setup Reference
+# Ubuntu/WSL2 C++ 설정 참고 문서
 
-Use this reference for the camera control project described in `docs/requirements.md`.
+이 문서는 `docs/requirements.md`에 설명된 카메라 관제 프로젝트에 사용한다.
 
-## Required Tools
+## 필수 도구
 
-Host tools:
+Host 도구:
 
 - `g++`
 - `make`
@@ -16,21 +16,21 @@ Host tools:
 - `unzip`
 - `tar`
 
-Optional but recommended:
+선택 사항이지만 권장:
 
 - `docker`
 - `docker compose`
 - VS Code CLI: `code`
 
-Libraries:
+라이브러리:
 
 - OpenCV
 - Qt6
 - Google Test
 
-## Native Ubuntu/WSL2 Install
+## Native Ubuntu/WSL2 설치
 
-Run with user approval:
+사용자 승인을 받은 뒤 실행한다.
 
 ```bash
 sudo apt update
@@ -38,13 +38,13 @@ sudo apt install -y build-essential cmake gdb pkg-config git curl unzip tar
 sudo apt install -y libopencv-dev qt6-base-dev libgtest-dev
 ```
 
-For RTSP/H.264 work, add multimedia packages:
+RTSP/H.264 작업을 위해 multimedia package를 추가한다.
 
 ```bash
 sudo apt install -y ffmpeg libavcodec-dev libavformat-dev libavutil-dev libswscale-dev
 ```
 
-Verify:
+검증:
 
 ```bash
 g++ --version
@@ -54,9 +54,9 @@ pkg-config --modversion opencv4
 pkg-config --modversion Qt6Core
 ```
 
-## vcpkg Install
+## vcpkg 설치
 
-Project-local install location:
+프로젝트 로컬 설치 위치:
 
 ```bash
 git clone https://github.com/microsoft/vcpkg.git packages/vcpkg
@@ -64,7 +64,7 @@ git clone https://github.com/microsoft/vcpkg.git packages/vcpkg
 ./packages/vcpkg/vcpkg install opencv4 qtbase gtest
 ```
 
-Use with CMake:
+CMake와 함께 사용:
 
 ```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=packages/vcpkg/scripts/buildsystems/vcpkg.cmake
@@ -72,15 +72,15 @@ cmake --build build
 ctest --test-dir build --output-on-failure
 ```
 
-If vcpkg is installed globally:
+vcpkg가 전역 설치되어 있다면 다음을 사용한다.
 
 ```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake
 ```
 
-## Docker Install
+## Docker 설치
 
-Install Docker only with explicit user approval:
+명시적인 사용자 승인을 받은 경우에만 Docker를 설치한다.
 
 ```bash
 sudo apt update
@@ -88,7 +88,7 @@ sudo apt install -y docker.io docker-compose-v2
 sudo usermod -aG docker "$USER"
 ```
 
-The group change requires a new login session. Verify after reopening the shell:
+Group 변경은 새 login session이 필요하다. Shell을 다시 연 뒤 검증한다.
 
 ```bash
 docker --version
@@ -96,7 +96,7 @@ docker compose version
 docker run --rm hello-world
 ```
 
-Recommended project container packages:
+권장 project container package:
 
 ```dockerfile
 FROM ubuntu:24.04
@@ -122,16 +122,16 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 ```
 
-## VS Code Setup
+## VS Code 설정
 
-Recommended extensions:
+권장 extension:
 
 ```bash
 code --install-extension ms-vscode.cpptools
 code --install-extension ms-vscode.cmake-tools
 ```
 
-Recommended `.vscode/settings.json`:
+권장 `.vscode/settings.json`:
 
 ```json
 {
@@ -142,23 +142,23 @@ Recommended `.vscode/settings.json`:
 }
 ```
 
-Recommended `.vscode/tasks.json` tasks:
+권장 `.vscode/tasks.json` task:
 
 - Configure: `cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug`
 - Build: `cmake --build build`
 - Test: `ctest --test-dir build --output-on-failure`
 
-Recommended debugger launch settings:
+권장 debugger launch 설정:
 
 - debugger type: `cppdbg`
 - MIMode: `gdb`
 - miDebuggerPath: `/usr/bin/gdb`
 - preLaunchTask: CMake build task
-- program: project executable under `build`
+- program: `build` 아래의 project executable
 
-## Verification Checklist
+## 검증 점검표
 
-Use these checks after setup:
+설정 후 다음을 확인한다.
 
 ```bash
 command -v g++
@@ -170,7 +170,7 @@ pkg-config --exists opencv4
 pkg-config --exists Qt6Core
 ```
 
-If CMake files exist:
+CMake 파일이 있으면 다음을 실행한다.
 
 ```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
@@ -178,7 +178,7 @@ cmake --build build
 ctest --test-dir build --output-on-failure
 ```
 
-If only a Makefile exists:
+Makefile만 있으면 다음을 실행한다.
 
 ```bash
 make

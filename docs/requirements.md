@@ -99,22 +99,22 @@ Client는 Server에 접속하여 영상 스트리밍을 수신하고, 카메라 
 ### 4.1 실행 환경
 
 - 운영체제는 Ubuntu를 기준으로 한다.
-- Package/Deployment Tool은 vcpkg 또는 Docker를 사용한다.
-- Server Interface는 RTSP/H.264를 사용한다.
+- 패키지/배포 도구는 vcpkg 또는 Docker를 사용한다.
+- Server 인터페이스는 RTSP/H.264를 사용한다.
 - Client UI는 Qt 기반으로 구현한다.
 
 ### 4.2 개발 환경
 
 - 개발 운영체제는 Ubuntu 또는 WSL2를 기준으로 한다.
-- IDE는 VS Code를 기준으로 하며, CoPilot, Codex 또는 Claude 같은 개발 보조 도구를 사용할 수 있다.
+- IDE는 VS Code를 기준으로 하며, Copilot, Codex 또는 Claude 같은 개발 보조 도구를 사용할 수 있다.
 - 프로그래밍 언어는 C++를 사용한다.
-- Build Tool은 CMake를 사용한다.
-- Package/Deployment Tool은 vcpkg 또는 Docker를 사용한다.
-- Compiler는 g++를 사용한다.
-- Debugging Tool은 gdb를 사용한다.
-- Vision Library는 OpenCV를 사용한다.
-- UI Framework는 Qt를 사용한다.
-- Unit Test Framework는 Google Test를 사용한다.
+- 빌드 도구는 CMake를 사용한다.
+- 패키지/배포 도구는 vcpkg 또는 Docker를 사용한다.
+- 컴파일러는 g++를 사용한다.
+- 디버깅 도구는 gdb를 사용한다.
+- 비전 라이브러리는 OpenCV를 사용한다.
+- UI 프레임워크는 Qt를 사용한다.
+- 단위 테스트 프레임워크는 Google Test를 사용한다.
 
 ### 4.3 유지보수성
 

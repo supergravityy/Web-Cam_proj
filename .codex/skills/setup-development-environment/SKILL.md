@@ -1,62 +1,62 @@
 ---
 name: setup-development-environment
-description: Use this skill when installing, configuring, repairing, or verifying the C++ development environment for this repository based on docs/requirements.md. Covers Ubuntu/WSL2, VS Code, CMake, g++, gdb, vcpkg, Docker, OpenCV, Qt, and Google Test setup.
+description: docs/requirements.md를 기준으로 이 저장소의 C++ 개발환경을 설치, 설정, 복구, 검증할 때 사용하는 스킬이다. Ubuntu/WSL2, VS Code, CMake, g++, gdb, vcpkg, Docker, OpenCV, Qt, Google Test 설정을 다룬다.
 ---
 
-# Setup Development Environment
+# 개발환경 설정 스킬
 
-## Purpose
+## 목적
 
-Use this skill to prepare the development environment required by `docs/requirements.md` for the camera control Client-Server C++ project.
+이 스킬은 `docs/requirements.md`에서 요구하는 카메라 관제 Client-Server C++ 프로젝트 개발환경을 준비하기 위해 사용한다.
 
-The skill covers:
+이 스킬이 다루는 범위:
 
-- Ubuntu or WSL2 host setup
+- Ubuntu 또는 WSL2 host 설정
 - C++ compiler, CMake, make, gdb, pkg-config
-- VS Code extensions and workspace settings
-- vcpkg-based dependencies: OpenCV, Qt, Google Test
-- Docker-based development environment
-- Environment verification and setup reporting
+- VS Code extension 및 workspace 설정
+- vcpkg 기반 dependency: OpenCV, Qt, Google Test
+- Docker 기반 개발환경
+- 환경 검증 및 설정 보고
 
-## Required Context
+## 필요한 context
 
-Before changing files or installing anything, read:
+파일을 변경하거나 설치를 수행하기 전에 다음을 읽는다.
 
 - `docs/requirements.md`
 - `README.md`
 - `Makefile`
-- `.vscode/` files, if present
+- 존재하는 경우 `.vscode/` 파일
 
-For concrete install commands and verification steps, read `references/ubuntu-wsl2-cpp-setup.md`.
+구체적인 설치 명령과 검증 단계는 `references/ubuntu-wsl2-cpp-setup.md`를 읽는다.
 
-## Workflow
+## 작업 흐름
 
-1. Inspect the current repository state.
-2. Compare it with `docs/requirements.md`.
-3. Run `bash .codex/skills/setup-development-environment/scripts/check_environment.sh` if available.
-4. Identify missing tools, missing dependencies, and mismatched VS Code settings.
-5. Before running package installation commands, request user approval because they may require sudo, network, or Docker permissions.
-6. Apply the smallest necessary setup changes.
-7. Verify using command checks, CMake configure/build if available, and VS Code configuration inspection.
-8. Report what was installed, what was configured, what could not be verified, and the next manual action if any.
+1. 현재 저장소 상태를 확인한다.
+2. `docs/requirements.md`와 비교한다.
+3. 가능한 경우 `bash .codex/skills/setup-development-environment/scripts/check_environment.sh`를 실행한다.
+4. 누락된 tool, 누락된 dependency, VS Code 설정 불일치를 식별한다.
+5. package 설치 명령을 실행하기 전에는 sudo, network, Docker 권한이 필요할 수 있으므로 사용자 승인을 요청한다.
+6. 필요한 최소 설정 변경만 적용한다.
+7. 명령 점검, 가능한 경우 CMake configure/build, VS Code 설정 검토로 검증한다.
+8. 설치한 것, 설정한 것, 검증하지 못한 것, 필요한 다음 수동 작업을 보고한다.
 
-## Setup Policy
+## 설정 정책
 
-- Prefer project-local configuration over global mutation.
-- Do not edit shell startup files unless the user explicitly asks.
-- Do not assume vcpkg is installed globally; support `$VCPKG_ROOT` and `packages/vcpkg`.
-- Do not require Docker if the user chooses a native Ubuntu/WSL2 setup.
-- Do not require vcpkg if the user chooses Docker/system packages.
-- Keep build outputs in `build`.
-- Keep external packages under `packages` when installing project-local tools.
-- Preserve user changes in `.vscode`, `Makefile`, and CMake files.
+- 전역 변경보다 프로젝트 로컬 설정을 우선한다.
+- 사용자가 명시적으로 요청하지 않으면 shell startup file을 수정하지 않는다.
+- vcpkg가 전역 설치되어 있다고 가정하지 않는다. `$VCPKG_ROOT`와 `packages/vcpkg`를 모두 지원한다.
+- 사용자가 native Ubuntu/WSL2 설정을 선택하면 Docker를 필수로 요구하지 않는다.
+- 사용자가 Docker 또는 system package를 선택하면 vcpkg를 필수로 요구하지 않는다.
+- 빌드 산출물은 `build`에 둔다.
+- 프로젝트 로컬 tool을 설치할 때 외부 package는 `packages` 아래에 둔다.
+- `.vscode`, `Makefile`, CMake 파일의 사용자 변경은 보존한다.
 
-## Expected Output
+## 기대 출력
 
-When acting as a setup agent, produce a concise report with:
+Setup Agent로 동작할 때는 다음을 포함한 간결한 보고서를 작성한다.
 
-- `Detected`: OS, compiler, CMake, gdb, Docker, vcpkg, VS Code CLI
-- `Installed or configured`: actions completed
-- `Project files changed`: paths changed
-- `Verified`: commands that passed
-- `Needs attention`: missing tools, approval-needed commands, or manual GUI steps
+- `감지됨`: OS, compiler, CMake, gdb, Docker, vcpkg, VS Code CLI
+- `설치 또는 설정됨`: 완료한 작업
+- `변경된 프로젝트 파일`: 변경한 path
+- `검증됨`: 통과한 명령
+- `주의 필요`: 누락된 tool, 승인 필요 명령, 수동 GUI 단계
