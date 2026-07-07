@@ -1,5 +1,11 @@
 # Web-Cam_proj
 
+## Project documents
+
+- [Requirements](docs/requirements.md)
+- [Setup manager agent](.agents/setup-manager.md)
+- [Setup skill](.codex/skills/setup-development-environment/SKILL.md)
+
 ## C/C++ workspace
 
 Directory layout:

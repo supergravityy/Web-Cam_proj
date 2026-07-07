@@ -1,0 +1,4 @@
+interface:
+  display_name: "Setup Development Environment"
+  short_description: "Install and verify the project C++ toolchain"
+  default_prompt: "Use $setup-development-environment to install and verify the C++ development environment for this project."
