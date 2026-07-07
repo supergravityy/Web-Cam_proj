@@ -5,6 +5,9 @@
 namespace camera::common {
 namespace {
 
+template <typename>
+inline constexpr bool kDependentFalse = false;
+
 CommandValidationResult valid_command()
 {
     return {true, ErrorCode::None, "Command is valid."};
@@ -59,8 +62,10 @@ CommandType command_type(const Command& command)
                 return CommandType::Disconnect;
             } else if constexpr (std::is_same_v<Payload, FrameRateCommand>) {
                 return CommandType::SetFrameRate;
-            } else {
+            } else if constexpr (std::is_same_v<Payload, ResolutionCommand>) {
                 return CommandType::SetResolution;
+            } else {
+                static_assert(kDependentFalse<Payload>, "Unhandled command payload type.");
             }
         },
         command);
@@ -80,12 +85,14 @@ CommandValidationResult validate_command(const Command& command)
                 }
 
                 return unsupported_setting("Unsupported frame rate. Supported range is 1-240 FPS.");
-            } else {
+            } else if constexpr (std::is_same_v<Payload, ResolutionCommand>) {
                 if (is_supported_resolution(payload.width, payload.height)) {
                     return valid_command();
                 }
 
                 return unsupported_setting("Unsupported resolution. Supported range is 1x1-7680x4320.");
+            } else {
+                static_assert(kDependentFalse<Payload>, "Unhandled command payload type.");
             }
         },
         command);

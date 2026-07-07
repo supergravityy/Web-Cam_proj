@@ -182,11 +182,15 @@ Client는 Server에 접속하여 영상 스트리밍을 수신하고, 카메라 
 
 ## 5. 미결 이슈
 
-다음 항목은 구현 전 의사결정이 필요하다.
+다음 항목은 구현 전 의사결정 또는 추적이 필요하다.
 
-- Client는 단일 Client만 고려할 것인지, 다중 Client 접속을 고려할 것인지 결정해야 한다.
 - 얼굴 인식 기능을 Client에서 수행할 것인지 결정해야 한다.
-- 최대 해상도 목표는 1080p로 제한할 것인지, 4K까지 고려할 것인지 결정해야 한다.
+
+결정 완료 항목:
+
+- Client 접속 수 정책은 초기 단일 active Client 지원으로 결정한다.
+- 최대 해상도 목표는 기본 1080p, 최대 4K 지원으로 결정한다.
+- 위 결정은 `docs/adr/ADR-001-client-connection-policy.md`와 `docs/adr/ADR-002-video-resolution-policy.md`에서 추적한다.
 
 ## 6. 초기 개발 범위
 

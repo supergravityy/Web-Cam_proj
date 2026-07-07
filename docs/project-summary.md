@@ -31,27 +31,42 @@
 │   │       └── main.cpp
 │   ├── Common/
 │   │   ├── include/
-│   │   │   └── camera/common/build_info.h
+│   │   │   └── camera/common/
+│   │   │       ├── build_info.h
+│   │   │       ├── command.h
+│   │   │       ├── error.h
+│   │   │       └── video_policy.h
 │   │   └── src/
-│   │       └── build_info.cpp
+│   │       ├── build_info.cpp
+│   │       ├── command.cpp
+│   │       ├── error.cpp
+│   │       └── video_policy.cpp
 │   ├── Server/
 │   │   └── src/
 │   │       └── main.cpp
 │   ├── Inc/
 │   └── Src/
 ├── docs/
+│   ├── adr/
+│   │   ├── ADR-001-client-connection-policy.md
+│   │   └── ADR-002-video-resolution-policy.md
 │   ├── product-backlog.md
 │   ├── project-summary.md
 │   ├── requirements.md
 │   └── sprints/
-│       └── sprint-1.md
+│       ├── sprint-1.md
+│       ├── sprint-2.md
+│       └── sprint-3.md
 ├── packages/
 │   └── vcpkg/
 ├── tests/
 │   ├── integration/
 │   │   └── .gitkeep
 │   └── unit/
-│       └── common_build_info_test.cpp
+│       ├── common_build_info_test.cpp
+│       ├── common_command_test.cpp
+│       ├── common_error_test.cpp
+│       └── common_video_policy_test.cpp
 ├── .codex/
 │   └── skills/setup-development-environment/
 ├── .vscode/
@@ -206,29 +221,31 @@ Sprint 2에서 완료된 항목:
 - PB-018 vcpkg Manifest
 - PB-021 설정 검증 실패 코드 정책
 
-새로 등록된 기술부채:
+Sprint 3에서 완료된 항목:
 
 - PB-022 명령 타입 확장 안전성 보강
-
-추가 요구사항으로 등록된 항목:
-
 - PB-023 RTSP 고정 URL 규칙
 - PB-024 Video Format 및 Codec 정책
+- PB-028 Client 접속 수 정책 결정
+- PB-030 최대 해상도 목표 결정
+
+남은 주요 항목:
+
 - PB-025 Latency 요구사항 검증 기준
 - PB-026 스트리밍 오류 감지
 - PB-027 자동 재접속 정책
-- PB-028 Client 접속 수 정책 결정
 - PB-029 얼굴 인식 처리 위치 결정
-- PB-030 최대 해상도 목표 결정
+- PB-006 Client 접속 처리
+- PB-007 명령 처리
+- PB-008 RTSP/H.264 스트리밍 Endpoint
+- PB-010 영상 스트림 표시
 
 다음 Sprint 후보:
 
 - PB-006 Client 접속 처리
 - PB-007 명령 처리
-- PB-023 RTSP 고정 URL 규칙
-- PB-024 Video Format 및 Codec 정책
-- PB-028 Client 접속 수 정책 결정
-- PB-030 최대 해상도 목표 결정
+- PB-008 RTSP/H.264 스트리밍 Endpoint
+- PB-025 Latency 요구사항 검증 기준
 
 ## 7. Sprint 1 결과
 
@@ -261,19 +278,79 @@ Sprint 1 문서: `docs/sprints/sprint-1.md`
 - Non-blocking finding: setup verification script가 누락 항목을 보고하지만 non-zero exit code를 반환하지 않음
 - 후속 조치: PB-021로 등록
 
-## 8. 주요 문서
+## 8. Sprint 2 결과
+
+Sprint 2 문서: `docs/sprints/sprint-2.md`
+
+상태: 완료
+
+완료 내용:
+
+- Common 명령 모델 정의
+- 구조화된 오류 모델 정의
+- vcpkg manifest 작성
+- 설정 검증 script 실패 코드 정책 보강
+
+검증 결과:
+
+- `cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug`: 통과
+- `cmake --build build`: 통과
+- `ctest --test-dir build --output-on-failure`: 통과, 8/8 passed
+- `make test`: 통과, 8/8 passed
+- `git diff --check`: 통과
+
+검토 결과:
+
+- Blocking finding: 없음
+- Non-blocking finding: 없음
+- 후속 조치: PB-022 명령 타입 확장 안전성 보강 등록
+
+## 9. Sprint 3 결과
+
+Sprint 3 문서: `docs/sprints/sprint-3.md`
+
+상태: 완료
+
+완료 내용:
+
+- Common 영상 정책 API 추가
+- RTSP 고정 URL 정책 코드화 및 문서화
+- 기본 영상 format과 지원 해상도, codec 정책 코드화
+- 명령 타입 확장 시 compile-time 누락 감지 보강
+- Client 접속 수 정책 ADR 작성
+- 최대 해상도 정책 ADR 작성
+
+검증 결과:
+
+- `cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug`: 통과
+- `cmake --build build`: 통과
+- `ctest --test-dir build --output-on-failure`: 통과, 13/13 passed
+- `make test`: 통과, 13/13 passed
+- `git diff --check`: 통과
+
+검토 결과:
+
+- Blocking finding: 없음
+- Non-blocking finding: 없음
+- 검토 에이전트 권고: 완료
+
+## 10. 주요 문서
 
 - `docs/requirements.md`: 요구사항 문서
 - `instruction.md`: 프로젝트 전체 규칙, 디렉터리 구조, Scrum 프로세스, 템플릿
 - `docs/product-backlog.md`: Product Backlog
 - `docs/sprints/sprint-1.md`: Sprint 1 기록 및 종료 보고서
+- `docs/sprints/sprint-2.md`: Sprint 2 기록 및 종료 보고서
+- `docs/sprints/sprint-3.md`: Sprint 3 기록 및 종료 보고서
+- `docs/adr/ADR-001-client-connection-policy.md`: Client 접속 수 정책 결정
+- `docs/adr/ADR-002-video-resolution-policy.md`: 영상 해상도 정책 결정
 - `agent/scrum-master.md`: Scrum Master Agent 정의
 - `agent/developer.md`: 구현 에이전트 정의
 - `agent/reviewer.md`: 검토 에이전트 정의
 - `agent/setup-manager.md`: Setup Manager Agent 정의
 - `.codex/skills/setup-development-environment/SKILL.md`: 개발환경 설정 스킬
 
-## 9. 추가 요구사항 요약
+## 11. 추가 요구사항 요약
 
 Video:
 
@@ -303,8 +380,11 @@ Control interface:
 - Client는 RTSP 연결 실패, 스트림 끊김, Frame Timeout, Codec 오류, 재접속 필요 상태를 감지해야 한다.
 - Client는 오류 발생 시 3초 간격으로 자동 재접속을 시도해야 한다.
 
-미결 이슈:
+결정 완료 이슈:
 
-- 단일 Client 또는 다중 Client 접속 지원 여부
+- 초기 Client 접속 정책은 단일 active Client로 확정한다.
+- 최대 해상도 목표는 기본 1080p, 최대 4K 지원으로 확정한다.
+
+남은 미결 이슈:
+
 - 얼굴 인식 기능을 Client에서 수행할지 여부
-- 최대 해상도를 1080p로 제한할지 4K까지 고려할지 여부

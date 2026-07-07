@@ -56,6 +56,17 @@ VS Code 연동:
 - `Ctrl+Shift+B`: CMake 기반 빌드
 - `F5`: gdb로 `build/bin/camera_client` 또는 `build/bin/camera_server` 디버그
 
+## 영상 및 RTSP 정책
+
+- RTSP URL 형식: `rtsp://<server-ip>:8554/camera`
+- RTSP port: `8554`
+- RTSP path: `/camera`
+- 기본 영상 format: `1920x1080`, `30FPS`, `H.264`
+- 지원 해상도: `1280x720`, `1920x1080`, `3840x2160`
+- 지원 codec: `H.264`, `MJPEG`
+- 초기 Client 접속 정책: 단일 active Client
+- 최대 해상도 목표: 기본 1080p, 최대 4K 지원
+
 외부 라이브러리는 다음과 같은 일반적인 구조로 `packages` 아래에 둘 수 있다.
 
 ```text

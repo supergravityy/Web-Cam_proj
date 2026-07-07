@@ -20,6 +20,7 @@ add_library(camera_common STATIC
     code/Common/src/build_info.cpp
     code/Common/src/command.cpp
     code/Common/src/error.cpp
+    code/Common/src/video_policy.cpp
 )
 
 target_include_directories(camera_common
@@ -55,6 +56,7 @@ add_executable(camera_tests
     tests/unit/common_build_info_test.cpp
     tests/unit/common_command_test.cpp
     tests/unit/common_error_test.cpp
+    tests/unit/common_video_policy_test.cpp
 )
 
 target_link_libraries(camera_tests
