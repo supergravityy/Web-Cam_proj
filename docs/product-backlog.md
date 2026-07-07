@@ -18,6 +18,9 @@
 - RTSP URL 및 영상 규격: PB-023, PB-024, PB-025
 - 스트리밍 오류 감지 및 자동 재접속: PB-026, PB-027
 - 미결 이슈 의사결정: PB-028, PB-029, PB-030
+- Server 명령 정책과 영상 정책 정합성: PB-031
+- Windows/Java Server 전환 및 개발환경: PB-032, PB-033
+- Spring Boot, MediaMTX, Web UI Server 구성: PB-034, PB-035, PB-036, PB-037
 
 ## 우선순위 기준
 
@@ -95,6 +98,7 @@
 
 ### PB-006 Client 접속 처리
 
+- 상태: 완료
 - 우선순위: P1
 - 추정치: 5
 - 모듈: Server
@@ -107,6 +111,7 @@
 
 ### PB-007 명령 처리
 
+- 상태: 완료
 - 우선순위: P1
 - 추정치: 5
 - 모듈: Server
@@ -397,6 +402,95 @@
   - 결정 결과가 video format 정책에 반영된다.
   - latency 요구사항과 성능 테스트 계획이 결정 결과에 맞게 갱신된다.
 
+### PB-031 Server 명령 정책과 영상 정책 정합성 정리
+
+- 상태: 대기
+- 우선순위: P1
+- 추정치: 3
+- 모듈: Common, Server
+- 사용자 스토리: Server 개발자로서 제어 명령으로 적용된 frame rate와 resolution이 실제 streaming video policy와 충돌하지 않도록 명령 검증과 영상 정책을 정렬해야 한다.
+- 인수 기준:
+  - Server command 처리에서 사용할 frame rate 및 resolution 허용 범위가 `video_policy`와 일관된다.
+  - 지원하지 않는 영상 format 상태가 `SessionController::video_format()`에 저장되지 않는다.
+  - PB-008 RTSP/H.264 streaming endpoint 구현 전에 정책 정합성 테스트가 존재한다.
+
+## 에픽 PB-E09: Windows/Java Server
+
+### PB-032 Server 기술 스택 전환 의사결정
+
+- 상태: 대기
+- 우선순위: P0
+- 추정치: 3
+- 모듈: Architecture
+- 사용자 스토리: Scrum Master로서 기존 C++/Ubuntu Server 구현과 신규 Windows/Java/Spring Boot Server 요구사항의 관계를 확정해야 한다.
+- 인수 기준:
+  - 기존 C++ Server core를 유지, 폐기, 또는 Java Server로 이관할지 결정한다.
+  - Windows D 드라이브 작업 환경 기준의 실제 repository 위치와 산출물 위치를 문서화한다.
+  - 다음 Sprint에서 사용할 Server 구현 언어와 build tool이 명확해야 한다.
+
+### PB-033 Java/Gradle Server 프로젝트 골격
+
+- 상태: 대기
+- 우선순위: P0
+- 추정치: 5
+- 모듈: Server, Build
+- 사용자 스토리: Server 개발자로서 Windows 환경에서 Spring Boot Server를 빌드하고 테스트할 수 있도록 Java/Gradle 프로젝트 골격이 필요하다.
+- 인수 기준:
+  - Gradle 기반 Server project가 존재한다.
+  - Spring Boot application entrypoint가 존재한다.
+  - JUnit 기반 기본 테스트가 존재한다.
+  - Windows D 드라이브 작업 환경 기준 실행 방법이 README 또는 별도 문서에 기록된다.
+
+### PB-034 Spring Boot 제어 명령 API
+
+- 상태: 대기
+- 우선순위: P1
+- 추정치: 5
+- 모듈: Server
+- 사용자 스토리: Client가 Server에 접속, 접속 해제, 화면 제어, frame rate, resolution 명령을 보낼 수 있도록 Spring Boot 기반 제어 API가 필요하다.
+- 인수 기준:
+  - Client connect 및 disconnect API가 존재한다.
+  - frame rate 및 resolution 제어 API가 존재한다.
+  - 성공 응답과 구조화된 오류 응답이 정의된다.
+  - JUnit 테스트로 정상/오류 흐름을 검증한다.
+
+### PB-035 MediaMTX 기반 RTSP/H.264 Streaming 연동
+
+- 상태: 대기
+- 우선순위: P1
+- 추정치: 8
+- 모듈: Server, Streaming
+- 사용자 스토리: Server가 카메라로부터 영상 스트림을 수신하고 Client에 RTSP/H.264 스트림을 제공할 수 있도록 MediaMTX 연동이 필요하다.
+- 인수 기준:
+  - MediaMTX 실행 또는 연동 설정이 문서화된다.
+  - Server는 카메라 영상 스트림 수신 상태를 추적한다.
+  - Server는 Client가 접근할 RTSP/H.264 endpoint를 제공한다.
+  - 스트림 시작 실패는 구조화된 오류로 보고된다.
+
+### PB-036 관리자 Web UI
+
+- 상태: 대기
+- 우선순위: P1
+- 추정치: 5
+- 모듈: Server, UI
+- 사용자 스토리: 관리자가 Server 상태와 오류를 확인할 수 있도록 Web UI가 필요하다.
+- 인수 기준:
+  - Web UI에서 Client 접속 상태를 확인할 수 있다.
+  - Web UI에서 카메라 스트림 수신 상태를 확인할 수 있다.
+  - Web UI에서 접속, 명령, 스트리밍 오류 메시지를 확인할 수 있다.
+
+### PB-037 Java Server OpenCV/JUnit 개발환경 검증
+
+- 상태: 대기
+- 우선순위: P1
+- 추정치: 3
+- 모듈: Tooling
+- 사용자 스토리: Server 개발자가 Windows/Java 환경에서 OpenCV와 JUnit을 안정적으로 사용할 수 있도록 개발환경 검증 절차가 필요하다.
+- 인수 기준:
+  - Java, Gradle, JUnit, OpenCV 설치 및 검증 방법이 문서화된다.
+  - IntelliJ 또는 JetBrains IDE 기준 실행 방법이 문서화된다.
+  - 개발환경 검증 명령이 성공/실패를 명확히 보고한다.
+
 ## 초기 제안 스프린트 1
 
 스프린트 목표: Client-Server 기능 개발 전에 필요한 CMake 기반 프로젝트 골격과 개발 작업 흐름을 구축한다.
@@ -425,3 +519,13 @@
 - 완료 항목: PB-022, PB-023, PB-024, PB-028, PB-030
 - 결정 사항: 초기 Client 접속 정책은 단일 active Client로 확정
 - 결정 사항: 기본 해상도는 1080p, 최대 해상도 목표는 4K 지원으로 확정
+
+## Sprint 4 완료 결과
+
+- 완료 항목: PB-006, PB-007
+- 신규 기술부채 항목: PB-031 Server 명령 정책과 영상 정책 정합성 정리
+
+## Server 추가 요구사항 반영 결과
+
+- 신규 항목: PB-032, PB-033, PB-034, PB-035, PB-036, PB-037
+- 주의 사항: 기존 C++/Ubuntu Server 구현과 신규 Windows/Java/Spring Boot Server 요구사항이 충돌할 수 있으므로 PB-032를 다음 Sprint의 우선 후보로 둔다.

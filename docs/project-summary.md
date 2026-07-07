@@ -9,6 +9,7 @@
 - Client는 Server에 접속하여 RTSP 영상 스트림을 수신한다.
 - Client는 Server로 카메라 제어 명령을 송신한다.
 - Server는 영상 스트리밍과 제어 명령 처리를 담당한다.
+- 신규 Server 요구사항은 Windows, Java, Gradle, Spring Boot, MediaMTX, Web UI 기반을 기준으로 한다.
 - Client UI는 Qt 기반으로 구현한다.
 - 영상/비전 처리는 OpenCV와 FFmpeg 계열 라이브러리를 사용한다.
 - 단위 테스트는 Google Test를 사용한다.
@@ -42,8 +43,12 @@
 │   │       ├── error.cpp
 │   │       └── video_policy.cpp
 │   ├── Server/
+│   │   ├── include/
+│   │   │   └── camera/server/
+│   │   │       └── session_controller.h
 │   │   └── src/
-│   │       └── main.cpp
+│   │       ├── main.cpp
+│   │       └── session_controller.cpp
 │   ├── Inc/
 │   └── Src/
 ├── docs/
@@ -56,12 +61,13 @@
 │   └── sprints/
 │       ├── sprint-1.md
 │       ├── sprint-2.md
-│       └── sprint-3.md
+│       ├── sprint-3.md
+│       └── sprint-4.md
 ├── packages/
 │   └── vcpkg/
 ├── tests/
 │   ├── integration/
-│   │   └── .gitkeep
+│   │   └── server_session_controller_test.cpp
 │   └── unit/
 │       ├── common_build_info_test.cpp
 │       ├── common_command_test.cpp
@@ -85,7 +91,7 @@
 
 - `code/Common`: Client와 Server가 공유하는 공통 라이브러리 코드
 - `code/Client`: Client 실행 파일 코드
-- `code/Server`: Server 실행 파일 코드
+- `code/Server`: Server 실행 파일 및 Server core session/controller 코드
 - `tests/unit`: 단위 테스트
 - `tests/integration`: 통합 테스트
 - `code/Inc`, `code/Src`: 이전 구조 호환을 위한 전환용 디렉터리
@@ -101,6 +107,7 @@
 생성된 CMake target:
 
 - `camera_common`: 공통 라이브러리
+- `camera_server_core`: Server 세션 및 명령 처리 core 라이브러리
 - `camera_client`: Client 실행 파일
 - `camera_server`: Server 실행 파일
 - `camera_tests`: Google Test 기반 테스트 실행 파일
@@ -229,23 +236,33 @@ Sprint 3에서 완료된 항목:
 - PB-028 Client 접속 수 정책 결정
 - PB-030 최대 해상도 목표 결정
 
+Sprint 4에서 완료된 항목:
+
+- PB-006 Client 접속 처리
+- PB-007 명령 처리
+
 남은 주요 항목:
 
 - PB-025 Latency 요구사항 검증 기준
 - PB-026 스트리밍 오류 감지
 - PB-027 자동 재접속 정책
 - PB-029 얼굴 인식 처리 위치 결정
-- PB-006 Client 접속 처리
-- PB-007 명령 처리
+- PB-031 Server 명령 정책과 영상 정책 정합성 정리
+- PB-032 Server 기술 스택 전환 의사결정
+- PB-033 Java/Gradle Server 프로젝트 골격
+- PB-034 Spring Boot 제어 명령 API
+- PB-035 MediaMTX 기반 RTSP/H.264 Streaming 연동
+- PB-036 관리자 Web UI
+- PB-037 Java Server OpenCV/JUnit 개발환경 검증
 - PB-008 RTSP/H.264 스트리밍 Endpoint
 - PB-010 영상 스트림 표시
 
 다음 Sprint 후보:
 
-- PB-006 Client 접속 처리
-- PB-007 명령 처리
-- PB-008 RTSP/H.264 스트리밍 Endpoint
-- PB-025 Latency 요구사항 검증 기준
+- PB-032 Server 기술 스택 전환 의사결정
+- PB-033 Java/Gradle Server 프로젝트 골격
+- PB-031 Server 명령 정책과 영상 정책 정합성 정리
+- PB-037 Java Server OpenCV/JUnit 개발환경 검증
 
 ## 7. Sprint 1 결과
 
@@ -334,7 +351,38 @@ Sprint 3 문서: `docs/sprints/sprint-3.md`
 - Non-blocking finding: 없음
 - 검토 에이전트 권고: 완료
 
-## 10. 주요 문서
+## 10. Sprint 4 결과
+
+Sprint 4 문서: `docs/sprints/sprint-4.md`
+
+상태: 완료
+
+완료 내용:
+
+- `camera_server_core` 라이브러리 추가
+- `camera::server::SessionController` 추가
+- 단일 active Client connect/disconnect 상태 추적 구현
+- 중복 connect, 다른 Client 접속 거부, inactive Client disconnect 거부 구현
+- active Client의 frame rate 및 resolution 명령 처리 구현
+- Server core 통합 테스트 추가
+
+검증 결과:
+
+- `cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug`: 통과
+- `cmake --build build`: 통과
+- `ctest --test-dir build --output-on-failure`: 통과, 21/21 passed
+- `make test`: 통과, 22/22 passed
+- `git diff --check`: 통과
+
+검토 결과:
+
+- Blocking finding: 없음
+- Non-blocking finding: Server command validation과 video policy의 허용 범위 경계가 불명확함
+- 조치: PB-031 Server 명령 정책과 영상 정책 정합성 정리 등록
+- 추가 조치: inactive Client disconnect 회귀 테스트 추가
+- 검토 에이전트 권고: 완료
+
+## 11. 주요 문서
 
 - `docs/requirements.md`: 요구사항 문서
 - `instruction.md`: 프로젝트 전체 규칙, 디렉터리 구조, Scrum 프로세스, 템플릿
@@ -342,6 +390,7 @@ Sprint 3 문서: `docs/sprints/sprint-3.md`
 - `docs/sprints/sprint-1.md`: Sprint 1 기록 및 종료 보고서
 - `docs/sprints/sprint-2.md`: Sprint 2 기록 및 종료 보고서
 - `docs/sprints/sprint-3.md`: Sprint 3 기록 및 종료 보고서
+- `docs/sprints/sprint-4.md`: Sprint 4 기록 및 종료 보고서
 - `docs/adr/ADR-001-client-connection-policy.md`: Client 접속 수 정책 결정
 - `docs/adr/ADR-002-video-resolution-policy.md`: 영상 해상도 정책 결정
 - `agent/scrum-master.md`: Scrum Master Agent 정의
@@ -350,7 +399,42 @@ Sprint 3 문서: `docs/sprints/sprint-3.md`
 - `agent/setup-manager.md`: Setup Manager Agent 정의
 - `.codex/skills/setup-development-environment/SKILL.md`: 개발환경 설정 스킬
 
-## 11. 추가 요구사항 요약
+## 12. Server 추가 요구사항 요약
+
+서버 기능:
+
+- Client로부터 제어 명령을 수신하고 수행한다.
+- Client와 접속 및 접속 해제를 처리한다.
+- 화면 제어 명령으로 frame range 또는 frame rate와 resolution을 처리한다.
+- Client 접속 시 카메라로부터 비디오 스트리밍을 수신한다.
+- Client로 비디오 스트리밍을 송출한다.
+- 문제 발생 시 관리자 Web UI 또는 Client에 메시지를 표시한다.
+
+Server 실행 환경:
+
+- OS: Windows
+- Package/Deployment Tool: Gradle
+- Server Interface: RTSP/H.264
+- UI: Web UI
+- Framework/Media: Spring Boot, MediaMTX
+
+Server 개발 환경:
+
+- OS: Windows
+- 작업 위치: Windows D 드라이브 작업 환경 고려
+- IDE: IntelliJ 또는 JetBrains 계열 IDE, Codex 또는 Claude
+- Programming Language: Java
+- Build Tool: Gradle
+- Vision Library: OpenCV
+- UI: Web
+- Test: JUnit
+
+주의 사항:
+
+- 기존 Sprint 1-4는 C++/CMake 기반 Server core를 구축했다.
+- 신규 요구사항은 Server를 Java/Gradle/Spring Boot/MediaMTX 기반으로 정의하므로 PB-032에서 기존 구현 유지, 폐기, 이관 여부를 먼저 결정해야 한다.
+
+## 13. 기존 Video/Interface 추가 요구사항 요약
 
 Video:
 

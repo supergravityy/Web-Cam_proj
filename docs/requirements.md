@@ -28,6 +28,8 @@ Client는 Server에 접속하여 영상 스트리밍을 수신하고, 카메라 
   - RTSP/H.264 영상 스트리밍 제공
   - Client 제어 명령 수신 및 처리
   - 카메라 프레임레이트 및 해상도 제어
+  - 카메라로부터 영상 스트리밍 수신
+  - 관리자 Web UI 또는 Client로 오류 메시지 표시
 
 ## 3. 기능 요구사항
 
@@ -111,6 +113,18 @@ Client는 Server에 접속하여 영상 스트리밍을 수신하고, 카메라 
 - Server는 처리할 수 없는 명령 또는 실패한 요청에 대해 오류 응답을 반환해야 한다.
 - 오류 응답은 Client가 사용자에게 표시할 수 있는 형태여야 한다.
 
+#### FR-S-005 카메라 영상 스트림 수신
+
+- Server는 Client 접속 시 카메라로부터 영상 스트리밍을 수신해야 한다.
+- Server는 수신한 카메라 영상을 Client로 스트리밍해야 한다.
+- 카메라 스트림 수신 실패는 구조화된 오류로 처리해야 한다.
+
+#### FR-S-006 관리자 Web UI 오류 표시
+
+- Server는 문제 발생 시 관리자 Web UI 또는 Client에 오류 메시지를 표시할 수 있어야 한다.
+- 오류 메시지는 접속, 명령 처리, 카메라 스트림 수신, Client 스트리밍 송출 실패를 구분해야 한다.
+- 관리자 Web UI는 운영자가 Server 상태를 확인할 수 있는 형태여야 한다.
+
 ## 4. 비기능 요구사항
 
 ### 4.1 실행 환경
@@ -119,6 +133,15 @@ Client는 Server에 접속하여 영상 스트리밍을 수신하고, 카메라 
 - 패키지/배포 도구는 vcpkg 또는 Docker를 사용한다.
 - Server 인터페이스는 RTSP/H.264를 사용한다.
 - Client UI는 Qt 기반으로 구현한다.
+
+### 4.1.1 Server 실행 환경 추가 요구사항
+
+- Server 운영체제는 Windows를 기준으로 한다.
+- Server 패키지/배포 및 빌드 도구는 Gradle을 사용한다.
+- Server 인터페이스는 RTSP/H.264를 사용한다.
+- Server UI는 Web UI를 사용한다.
+- Server framework는 Spring Boot를 사용한다.
+- RTSP streaming relay 또는 media server 구성 요소로 MediaMTX를 사용한다.
 
 ### 4.2 개발 환경
 
@@ -132,6 +155,17 @@ Client는 Server에 접속하여 영상 스트리밍을 수신하고, 카메라 
 - 비전 라이브러리는 OpenCV를 사용한다.
 - UI 프레임워크는 Qt를 사용한다.
 - 단위 테스트 프레임워크는 Google Test를 사용한다.
+
+### 4.2.1 Server 개발 환경 추가 요구사항
+
+- Server 개발 운영체제는 Windows를 기준으로 한다.
+- 현재 작업 위치는 Windows D 드라이브 작업 환경을 고려한다.
+- Server IDE는 IntelliJ 또는 JetBrains 계열 IDE를 기준으로 하며, Codex 또는 Claude 같은 개발 보조 도구를 사용할 수 있다.
+- Server 프로그래밍 언어는 Java를 사용한다.
+- Server 빌드 도구는 Gradle을 사용한다.
+- Server 비전 라이브러리는 OpenCV를 사용한다.
+- Server UI는 Web 기반으로 구현한다.
+- Server 테스트 프레임워크는 JUnit을 사용한다.
 
 ### 4.3 유지보수성
 
@@ -184,6 +218,7 @@ Client는 Server에 접속하여 영상 스트리밍을 수신하고, 카메라 
 
 다음 항목은 구현 전 의사결정 또는 추적이 필요하다.
 
+- 기존 C++/Ubuntu/CMake 기반 Server 구현과 신규 Windows/Java/Gradle/Spring Boot 기반 Server 요구사항의 관계를 결정해야 한다.
 - 얼굴 인식 기능을 Client에서 수행할 것인지 결정해야 한다.
 
 결정 완료 항목:

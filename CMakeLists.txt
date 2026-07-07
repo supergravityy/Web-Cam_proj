@@ -31,6 +31,21 @@ target_include_directories(camera_common
 
 target_compile_features(camera_common PUBLIC cxx_std_17)
 
+add_library(camera_server_core STATIC
+    code/Server/src/session_controller.cpp
+)
+
+target_include_directories(camera_server_core
+    PUBLIC
+        "${CMAKE_CURRENT_SOURCE_DIR}/code/Server/include"
+)
+
+target_link_libraries(camera_server_core
+    PUBLIC camera_common
+)
+
+target_compile_features(camera_server_core PUBLIC cxx_std_17)
+
 add_executable(camera_client
     code/Client/src/main.cpp
 )
@@ -44,7 +59,9 @@ add_executable(camera_server
 )
 
 target_link_libraries(camera_server
-    PRIVATE camera_common
+    PRIVATE
+        camera_common
+        camera_server_core
 )
 
 enable_testing()
@@ -53,6 +70,7 @@ find_package(GTest REQUIRED)
 include(GoogleTest)
 
 add_executable(camera_tests
+    tests/integration/server_session_controller_test.cpp
     tests/unit/common_build_info_test.cpp
     tests/unit/common_command_test.cpp
     tests/unit/common_error_test.cpp
@@ -62,6 +80,7 @@ add_executable(camera_tests
 target_link_libraries(camera_tests
     PRIVATE
         camera_common
+        camera_server_core
         GTest::gtest_main
 )
 

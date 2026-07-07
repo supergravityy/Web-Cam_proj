@@ -7,6 +7,9 @@
 - [프로젝트 지침](instruction.md)
 - [제품 백로그](docs/product-backlog.md)
 - [스프린트 1 백로그](docs/sprints/sprint-1.md)
+- [스프린트 2 백로그](docs/sprints/sprint-2.md)
+- [스프린트 3 백로그](docs/sprints/sprint-3.md)
+- [스프린트 4 백로그](docs/sprints/sprint-4.md)
 - [구현 에이전트](agent/developer.md)
 - [검토 에이전트](agent/reviewer.md)
 - [스크럼 마스터 에이전트](agent/scrum-master.md)
@@ -19,7 +22,7 @@
 
 - `code/Common`: Client와 Server가 공유하는 공통 라이브러리 코드
 - `code/Client`: Client 실행 파일 코드
-- `code/Server`: Server 실행 파일 코드
+- `code/Server`: Server 실행 파일 및 Server core session/controller 코드
 - `tests/unit`: 단위 테스트 코드
 - `tests/integration`: 통합 테스트 코드
 - `code/Inc`, `code/Src`: 이전 구조 호환을 위한 전환용 디렉터리
@@ -66,6 +69,7 @@ VS Code 연동:
 - 지원 codec: `H.264`, `MJPEG`
 - 초기 Client 접속 정책: 단일 active Client
 - 최대 해상도 목표: 기본 1080p, 최대 4K 지원
+- Server core는 단일 active Client의 connect/disconnect 상태를 추적하고, 연결된 active Client의 frame rate/resolution 명령만 처리한다.
 
 외부 라이브러리는 다음과 같은 일반적인 구조로 `packages` 아래에 둘 수 있다.
 
