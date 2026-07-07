@@ -30,6 +30,7 @@ Client는 Server에 접속하여 영상 스트리밍을 수신하고, 카메라 
   - 카메라 프레임레이트 및 해상도 제어
   - 카메라로부터 영상 스트리밍 수신
   - 관리자 Web UI 또는 Client로 오류 메시지 표시
+  - 제품 Server 구현은 Java, Gradle, Spring Boot, MediaMTX, Web UI 기반으로 진행
 
 ## 3. 기능 요구사항
 
@@ -142,6 +143,8 @@ Client는 Server에 접속하여 영상 스트리밍을 수신하고, 카메라 
 - Server UI는 Web UI를 사용한다.
 - Server framework는 Spring Boot를 사용한다.
 - RTSP streaming relay 또는 media server 구성 요소로 MediaMTX를 사용한다.
+- 향후 제품 Server production path는 Java/Spring Boot Server를 기준으로 한다.
+- 기존 C++/CMake `camera_server_core`는 삭제하지 않고 세션 및 명령 처리 도메인 프로토타입과 참조 구현으로 보존한다.
 
 ### 4.2 개발 환경
 
@@ -160,6 +163,12 @@ Client는 Server에 접속하여 영상 스트리밍을 수신하고, 카메라 
 
 - Server 개발 운영체제는 Windows를 기준으로 한다.
 - 현재 작업 위치는 Windows D 드라이브 작업 환경을 고려한다.
+- 현재 Codex workspace는 `/home/sungsu/workspace/KOSTA_260707`이다.
+- WSL에서 확인된 D 드라이브 mount는 `/mnt/d`이다.
+- Windows Server 실제 작업 위치는 WSL 기준 `/mnt/d/WindowServer_20260707/untitled`, Windows 표기 기준 `D:\WindowServer_20260707\untitled`이다.
+- Gradle build 산출물은 `/mnt/d/WindowServer_20260707/untitled/build` 아래에 생성한다.
+- Spring Boot 실행 산출물은 `/mnt/d/WindowServer_20260707/untitled/build/libs` 아래에 생성한다.
+- Sprint 5에서는 해당 D 드라이브 작업 디렉터리를 새로 생성하거나 수정하지 않았으며, PB-033에서 기존 Java/Gradle/Spring Boot 골격을 검증 및 정리한다.
 - Server IDE는 IntelliJ 또는 JetBrains 계열 IDE를 기준으로 하며, Codex 또는 Claude 같은 개발 보조 도구를 사용할 수 있다.
 - Server 프로그래밍 언어는 Java를 사용한다.
 - Server 빌드 도구는 Gradle을 사용한다.
@@ -173,6 +182,8 @@ Client는 Server에 접속하여 영상 스트리밍을 수신하고, 카메라 
 - 공통 데이터 구조와 명령 정의는 Common 모듈에 배치한다.
 - 빌드 산출물은 `build` 디렉터리에 생성한다.
 - 외부 라이브러리 또는 패키지는 `packages` 디렉터리 또는 vcpkg/Docker 환경으로 관리한다.
+- C++ Client/Common 자산은 Client 및 공통 개념 검증 자산으로 유지한다.
+- Server production 구현의 언어와 build tool은 Java/Gradle을 기준으로 한다.
 
 ### 4.4 테스트
 
@@ -218,14 +229,14 @@ Client는 Server에 접속하여 영상 스트리밍을 수신하고, 카메라 
 
 다음 항목은 구현 전 의사결정 또는 추적이 필요하다.
 
-- 기존 C++/Ubuntu/CMake 기반 Server 구현과 신규 Windows/Java/Gradle/Spring Boot 기반 Server 요구사항의 관계를 결정해야 한다.
 - 얼굴 인식 기능을 Client에서 수행할 것인지 결정해야 한다.
 
 결정 완료 항목:
 
 - Client 접속 수 정책은 초기 단일 active Client 지원으로 결정한다.
 - 최대 해상도 목표는 기본 1080p, 최대 4K 지원으로 결정한다.
-- 위 결정은 `docs/adr/ADR-001-client-connection-policy.md`와 `docs/adr/ADR-002-video-resolution-policy.md`에서 추적한다.
+- Server production path는 Java/Gradle/Spring Boot/MediaMTX/Web UI 기반으로 결정하고, 기존 C++ `camera_server_core`는 참조 구현으로 보존한다.
+- 위 결정은 `docs/adr/ADR-001-client-connection-policy.md`, `docs/adr/ADR-002-video-resolution-policy.md`, `docs/adr/ADR-003-server-technology-stack-transition.md`에서 추적한다.
 
 ## 6. 초기 개발 범위
 

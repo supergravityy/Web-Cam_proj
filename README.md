@@ -10,6 +10,7 @@
 - [스프린트 2 백로그](docs/sprints/sprint-2.md)
 - [스프린트 3 백로그](docs/sprints/sprint-3.md)
 - [스프린트 4 백로그](docs/sprints/sprint-4.md)
+- [스프린트 5 백로그](docs/sprints/sprint-5.md)
 - [구현 에이전트](agent/developer.md)
 - [검토 에이전트](agent/reviewer.md)
 - [스크럼 마스터 에이전트](agent/scrum-master.md)
@@ -17,6 +18,10 @@
 - [개발환경 설정 스킬](.codex/skills/setup-development-environment/SKILL.md)
 
 ## C/C++ 작업 공간
+
+Sprint 5 결정에 따라 제품 Server production path는 Java/Gradle/Spring Boot/MediaMTX/Web UI 기준으로 진행한다. 이 저장소의 C++ `camera_server_core`는 Sprint 4까지 검증한 세션 및 명령 처리 도메인 프로토타입과 참조 구현으로 보존한다.
+
+Windows Server 실제 작업 위치는 WSL 기준 `/mnt/d/WindowServer_20260707/untitled`, Windows 표기 기준 `D:\WindowServer_20260707\untitled`이다. Gradle build 산출물은 `build`, Spring Boot 실행 산출물은 `build/libs`, JUnit 결과는 `build/test-results/test`와 `build/reports/tests/test`를 사용한다. 이 D 드라이브 작업 디렉터리는 Sprint 5에서 생성하지 않은 기존 외부 작업물이며, PB-033에서 제품 Server 골격으로 검증 및 정리한다.
 
 디렉터리 구조:
 

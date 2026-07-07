@@ -418,27 +418,28 @@
 
 ### PB-032 Server 기술 스택 전환 의사결정
 
-- 상태: 대기
+- 상태: 완료
 - 우선순위: P0
 - 추정치: 3
 - 모듈: Architecture
 - 사용자 스토리: Scrum Master로서 기존 C++/Ubuntu Server 구현과 신규 Windows/Java/Spring Boot Server 요구사항의 관계를 확정해야 한다.
 - 인수 기준:
-  - 기존 C++ Server core를 유지, 폐기, 또는 Java Server로 이관할지 결정한다.
-  - Windows D 드라이브 작업 환경 기준의 실제 repository 위치와 산출물 위치를 문서화한다.
-  - 다음 Sprint에서 사용할 Server 구현 언어와 build tool이 명확해야 한다.
+  - 기존 C++ Server core를 유지, 폐기, 또는 Java Server로 이관할지 결정한다. 완료: C++ `camera_server_core`는 참조 구현으로 보존한다.
+  - Windows D 드라이브 작업 환경 기준의 실제 repository 위치와 산출물 위치를 문서화한다. 완료: 실제 Server repository는 WSL 기준 `/mnt/d/WindowServer_20260707/untitled`, Windows 기준 `D:\WindowServer_20260707\untitled`이며 Gradle 산출물은 `build`, Spring Boot 산출물은 `build/libs`, JUnit 결과는 `build/test-results/test`와 `build/reports/tests/test`를 사용한다.
+  - 다음 Sprint에서 사용할 Server 구현 언어와 build tool이 명확해야 한다. 완료: 제품 Server production path는 Java/Gradle/Spring Boot/MediaMTX/Web UI 기준이다.
 
-### PB-033 Java/Gradle Server 프로젝트 골격
+### PB-033 Java/Gradle Server 프로젝트 골격 검증 및 정리
 
 - 상태: 대기
 - 우선순위: P0
 - 추정치: 5
 - 모듈: Server, Build
-- 사용자 스토리: Server 개발자로서 Windows 환경에서 Spring Boot Server를 빌드하고 테스트할 수 있도록 Java/Gradle 프로젝트 골격이 필요하다.
+- 사용자 스토리: Server 개발자로서 Windows 환경에서 Spring Boot Server를 빌드하고 테스트할 수 있도록 D 드라이브의 기존 Java/Gradle 프로젝트 골격을 검증하고 정리해야 한다.
 - 인수 기준:
-  - Gradle 기반 Server project가 존재한다.
-  - Spring Boot application entrypoint가 존재한다.
-  - JUnit 기반 기본 테스트가 존재한다.
+  - `/mnt/d/WindowServer_20260707/untitled`의 Gradle 기반 Server project를 검증한다.
+  - Spring Boot application entrypoint를 검증한다.
+  - JUnit 기반 기본 테스트를 검증한다.
+  - Gradle build 산출물 위치와 Spring Boot 실행 산출물 위치를 확인한다.
   - Windows D 드라이브 작업 환경 기준 실행 방법이 README 또는 별도 문서에 기록된다.
 
 ### PB-034 Spring Boot 제어 명령 API
@@ -525,7 +526,19 @@
 - 완료 항목: PB-006, PB-007
 - 신규 기술부채 항목: PB-031 Server 명령 정책과 영상 정책 정합성 정리
 
+## Sprint 5 완료 결과
+
+- 완료 항목: PB-032
+- 결정 사항: 제품 Server production path는 Java, Gradle, Spring Boot, MediaMTX, Web UI 기반으로 확정
+- 결정 사항: 기존 C++/CMake `camera_server_core`는 Sprint 4까지 검증된 세션/명령 처리 도메인 프로토타입 및 참조 구현으로 보존
+- 결정 사항: C++ Client/Common 작업은 별도 Client 및 공통 개념 검증 자산으로 유지하되, Server production path에서는 Java/Gradle을 사용
+- D 드라이브 문서화: 현재 Codex workspace는 `/home/sungsu/workspace/KOSTA_260707`, WSL D 드라이브 mount는 `/mnt/d`, 실제 Server repository는 `/mnt/d/WindowServer_20260707/untitled`, Windows 표기는 `D:\WindowServer_20260707\untitled`
+- 산출물 문서화: Gradle build directory는 `build`, Spring Boot 산출물은 `build/libs`, JUnit 결과는 `build/test-results/test` 및 `build/reports/tests/test`, MediaMTX 설정은 `config/mediamtx.yml`을 사용
+- D 드라이브 기존 작업물 상태: Sprint 5에서 생성 또는 수정하지 않았으며, 발견된 기존 Java/Gradle/Spring Boot/MediaMTX 작업 디렉터리로 기록
+- 다음 Sprint 우선 후보: PB-033 Java/Gradle Server 프로젝트 골격 검증 및 정리, PB-037 Java Server OpenCV/JUnit 개발환경 검증
+
 ## Server 추가 요구사항 반영 결과
 
 - 신규 항목: PB-032, PB-033, PB-034, PB-035, PB-036, PB-037
-- 주의 사항: 기존 C++/Ubuntu Server 구현과 신규 Windows/Java/Spring Boot Server 요구사항이 충돌할 수 있으므로 PB-032를 다음 Sprint의 우선 후보로 둔다.
+- PB-032 결정에 따라 PB-033 이후 Server production 구현은 Java/Gradle/Spring Boot/MediaMTX/Web UI 기준으로 진행한다.
+- 기존 C++/Ubuntu/CMake Server core는 삭제하지 않고 참조 구현으로 보존한다.
