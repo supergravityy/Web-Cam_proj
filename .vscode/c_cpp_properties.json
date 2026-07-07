@@ -7,15 +7,14 @@
       "cStandard": "c17",
       "cppStandard": "c++17",
       "intelliSenseMode": "linux-gcc-x64",
+      "compileCommands": "${workspaceFolder}/build/compile_commands.json",
       "includePath": [
-        "${workspaceFolder}/code/Inc",
-        "${workspaceFolder}/code/**",
-        "${workspaceFolder}/packages/**/include"
+        "${workspaceFolder}/code/Common/include",
+        "${workspaceFolder}/code/Inc"
       ],
       "browse": {
         "path": [
-          "${workspaceFolder}/code",
-          "${workspaceFolder}/packages"
+          "${workspaceFolder}/code"
         ],
         "limitSymbolsToIncludedHeaders": true
       },

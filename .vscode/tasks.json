@@ -2,11 +2,28 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "C/C++: make build",
+      "label": "CMake: configure",
       "type": "shell",
-      "command": "make",
+      "command": "cmake",
       "args": [
-        "all"
+        "-S",
+        ".",
+        "-B",
+        "build",
+        "-DCMAKE_BUILD_TYPE=Debug"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "CMake: build",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--build",
+        "build"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
@@ -15,14 +32,19 @@
         "kind": "build",
         "isDefault": true
       },
+      "dependsOn": [
+        "CMake: configure"
+      ],
       "problemMatcher": "$gcc"
     },
     {
-      "label": "C/C++: make clean",
+      "label": "CTest: all",
       "type": "shell",
-      "command": "make",
+      "command": "ctest",
       "args": [
-        "clean"
+        "--test-dir",
+        "build",
+        "--output-on-failure"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
@@ -30,16 +52,19 @@
       "problemMatcher": []
     },
     {
-      "label": "C/C++: make run",
+      "label": "CMake: clean",
       "type": "shell",
-      "command": "make",
+      "command": "cmake",
       "args": [
-        "run"
+        "-E",
+        "rm",
+        "-rf",
+        "build"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
       },
-      "problemMatcher": "$gcc"
+      "problemMatcher": []
     }
   ]
 }

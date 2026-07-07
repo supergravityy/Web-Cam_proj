@@ -1,0 +1,10 @@
+{
+  "name": "web-cam-proj",
+  "version-string": "0.1.0",
+  "description": "CMake 기반 Web-Cam Client/Server 프로젝트 개발 의존성",
+  "dependencies": [
+    "gtest",
+    "opencv4",
+    "qtbase"
+  ]
+}
