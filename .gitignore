@@ -1,0 +1,17 @@
+build/*
+!build/.gitkeep
+
+packages/*
+!packages/.gitkeep
+
+.vscode/ipch/
+.vscode/.browse.VC.db*
+
+*.o
+*.obj
+*.exe
+*.out
+*.so
+*.dll
+*.dylib
+*.a
